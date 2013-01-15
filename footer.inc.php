@@ -8,11 +8,12 @@
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/jquery.json.min.js"></script>
 <script type="text/javascript" src="js/scrolltotop.js"></script>
+<script type="text/javascript" src="js/lib.js"></script>
 <script type="text/javascript">
     jQuery(function($){
         $.scrolltotop({
         className: 'totop',
-        controlHTML : '<a href="javascript:;" style="font-size: 20px">回到顶部↑</a>',
+        controlHTML : '<a href="javascript:;" style="font-size: 16px">回到顶部↑</a>',
         offsety:0
        });
     });

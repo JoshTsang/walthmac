@@ -16,3 +16,21 @@
 .navbar-inverse .brand, .navbar-inverse .nav > li > a {
     color: #C4E3FA;
 }
+
+.argName {
+	font-weight: bold;
+}
+
+.argValue {
+	padding: 4px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	background-color: #FCF8E3;
+	border: 1px solid #FBEED5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.table th, .table td {
+	vertical-align: middle;
+}
