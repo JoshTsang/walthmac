@@ -25,7 +25,7 @@
         height: auto !important;
         height: 100%;
         /* Negative indent footer by it's height */
-        margin: 0 auto -50px;
+        margin: 0 auto -100px;
       }
 
       /* Set the fixed height of the footer here */
@@ -39,11 +39,17 @@
           margin-left: auto;
           margin-right: auto;
           width: 250px;
-          margin-top: 20%;
+          margin-top: 15%;
           display: none;
       }
       
-
+     .logo {
+          width: 100%;
+          margin-top: 5%;
+          color: #FFFFFF;
+          text-align: center;
+      }
+      
       #jsWarning {
           min-height: 300px;
           margin-left: auto;
@@ -72,6 +78,7 @@
 
   <body>
     <div id="wrap">
+        <div class="logo"><h1 style="color: #FFFFFF">沃思测控</h1></div>
         <div id="jsWarning">
             <p>网页显示需要Javascript的支持!<br/>您的浏览器不支持Javascript，请使用支持Javascript的浏览器访问！</p>
         </div>

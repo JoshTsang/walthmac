@@ -1,3 +1,6 @@
 <?php
-    phpinfo();
+   require '../lib/data.inc.php'; 
+   $data = new Data();
+   
+   echo $data->getArgs();
 ?>

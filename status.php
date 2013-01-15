@@ -39,5 +39,6 @@
         <?php $html->status(0); ?>
     </div>
     <?php include "footer.inc.php"; ?>
+    <script type="text/javascript" src="js/status.js"></script>
   </body>
 </html>

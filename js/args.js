@@ -17,3 +17,25 @@ var updateArg = function(id) {
 var setArg = function(id, value) {
 	alert("set " + id + " to " + value);
 }
+
+function Args() {
+	this.refresh = function() {
+		$.getJSON("api/args.php", function(data){
+			if (undefined === data.succ) {
+			    $.each(data, function(i, item){
+			      $("#" + item.id + " .argValue").html(item.value);
+			    });
+			} else {
+				//TODO err handle
+			}
+		});
+	}
+}
+
+var args = new Args();
+$(document).ready(
+	function(){
+		args.refresh();
+		//setInterval("args.refresh()",5000);
+	}
+)
