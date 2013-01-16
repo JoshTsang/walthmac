@@ -92,7 +92,7 @@
                   <input id="username" type="text" id="uname" placeholder="用户名"><br/>
                   <input id="passwd" type="password" id="passwd" placeholder="密码">
               </form>
-              <a href="status.php" id="loginBtn" class="btn btn-primary" style="min-width=80px;margin-left: 150px">登 陆</a>
+              <a id="login" class="btn btn-primary" style="min-width=80px;margin-left: 150px">登 陆</a>
               <div id="push"></div>
         </div>
         </div>
@@ -100,6 +100,8 @@
     <div id="footer">
        <?php include "footer.inc.php"; ?>
     </div>
+    <script type="text/javascript" src="js/md5.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript">
         $(document).ready(
             function(){

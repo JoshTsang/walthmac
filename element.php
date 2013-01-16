@@ -7,13 +7,13 @@
     define("DISH_CATEGORY", "dishCategory");
     define("PRINTERS", 'sortPrint');
     class element {
-        // function __construct() {
-            // session_start();
-            // if (!$_SESSION['logedin']) {
-                // $url="login.php";
-                // header("Location: $url");
-            // }
-        // }
+        function __construct() {
+            session_start();
+            if (!$_SESSION['logedin']) {
+                $url="login.php";
+                header("Location: $url");
+            }
+        }
         
         public function navBar($active) {
         	echo '<div class="navbar navbar-fixed-top navbar-inverse">
@@ -26,9 +26,10 @@
              echo '          <li '.($active==4?'class="active"':"").'><a href="manage.php">管理</a></li>';
              
              echo '       </ul>
-                          <div class="pull-right" style="margin-top:12px; margin-right:15px;"><a href="login.php"><i class="icon-off"></i></a></div>
+                          <div class="pull-right" style="margin-top:12px; margin-right:15px;"><a href="api/login.php?logout=true"><i class="icon-off"></i></a></div>
                       </div>
                     </div>';
+           echo '<div id="cup" style="display:none">'.$_SESSION['permission'].'</div>';
            $this->alertDlg();
         }
 

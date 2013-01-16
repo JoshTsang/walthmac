@@ -39,5 +39,13 @@
         <?php $html->manage(0); ?>
     </div>
     <?php include "footer.inc.php"; ?>
+    <script type="text/javascript" src="js/user.js"></script>
+    <script>
+        $(document).ready(
+            function(){
+                users.load();
+            }
+        );
+    </script>
   </body>
 </html>

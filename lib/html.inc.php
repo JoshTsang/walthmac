@@ -57,15 +57,7 @@
             array('name' => '挤出机加速时间','id'=> 'extrTime', 'unit' => 's', 'permission' => 0),
             array('name' => '','id'=> '', 'unit' => '', 'permission' => 0),
         );
-        
-        private $users = array(
-            array('name' => 'admin','id'=> '', 'permission' => 0),
-            array('name' => 'test1','id'=> '', 'permission' => 0),
-            array('name' => 'test2','id'=> '', 'permission' => 0),
-            array('name' => 'test3','id'=> '', 'permission' => 0),
-            array('name' => '','id'=> '', 'permission' => 0),
-        );
-        
+       
         public function status($permission) {
             $count = count($this->data) - 1;
             
@@ -128,15 +120,11 @@
         }
         
         public function manage($permission) {
-            $count = count($this->users) - 1;
             echo '<div style="margin-top:20px; margin-bottom:20px; margin-left:20px;">
-                    <button class="btn btn-primary" type="button" data-toggle="modal">添加</button>
+                    <a class="btn btn-primary" href="user.php">添加</a>
                   </div>';
-            echo '<table class="table table-striped ">';
-            for($i=0; $i<$count; $i++) {
-                echo '<tr><td class="argName">'.($this->users[$i]['name']).'</td>'.
-                '<td><button class="btn btn-primary pull-right" type="button" data-toggle="modal">修改</button></td></tr>';
-            }
+            echo '<table id="users" class="table table-striped ">';
+            
             echo '</table>';
         }
     }

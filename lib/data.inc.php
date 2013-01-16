@@ -103,14 +103,6 @@
             array('name' => '','id'=> '', 'value' => '', 'permission' => 0),
         );
         
-        private $users = array(
-            array('name' => 'admin','id'=> '', 'permission' => 0),
-            array('name' => 'test1','id'=> '', 'permission' => 0),
-            array('name' => 'test2','id'=> '', 'permission' => 0),
-            array('name' => 'test3','id'=> '', 'permission' => 0),
-            array('name' => '','id'=> '', 'permission' => 0),
-        );
-        
         public function getStatusSize() {
             return count($this->data) - 1;
         }
