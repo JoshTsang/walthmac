@@ -78,12 +78,17 @@
                         }
                   ?>
                   <span style="color: #FF0000">*</span>
+              <?php if(!isset($_GET['uname']) || @($_SESSION['user'] == $_GET['uname'])) { ?>
+              
               <div id="pwd">
                   <input type="password" id="passwd" placeholder="密码">
                   <span style="color: #FF0000">*</span>
                   <input type="password" id="pwdConfirm" placeholder="确认密码">
                   <span style="color: #FF0000">*</span>
               </div>
+              <?php 
+                    }
+                    if($_SESSION['permission'] >= 3) { ?>
               <div id="permissionSelection">
                   权限: 
                 <select id="permission" style="width:170px">';
@@ -91,8 +96,9 @@
                     <option value="2">2</option>
                     <option value="3">3</option>
                 </select>
-                <a id="addUserBtn" class="btn btn-primary pull-right" style="margin-top: 25px">确定</a>
               </div>
+              <?php } ?>
+              <a id="addUserBtn" class="btn btn-primary pull-right" style="margin-top: 25px">确定</a>
         </form>
     </div>
     <?php include "footer.inc.php"; ?>
@@ -100,13 +106,13 @@
     <script>
     <?php 
         if(isset($_GET['permission'])) {
-            echo 'document.getElementById("permission").value="'.$_GET['permission'].'";';
+            echo 'if (document.getElementById("permission") != null) {document.getElementById("permission").value="'.$_GET['permission'].'";}';
         }
     ?>
         $(document).ready(
             function(){
                 <?php 
-                    if ($_GET['uid']) {
+                    if (isset($_GET['uid'])) {
                         echo '$("#addUserBtn").click({id:'.$_GET['uid'].'}, users.update);';
                     } else {
                         echo '$("#addUserBtn").click(users.add);';

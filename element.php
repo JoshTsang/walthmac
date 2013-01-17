@@ -12,6 +12,11 @@
             if (!$_SESSION['logedin']) {
                 $url="login.php";
                 header("Location: $url");
+            } else if ((time()-$_SESSION['time']) > 300) {
+                $_SESSION['logedin'] = false;
+                
+                $url="login.php";
+                header("Location: $url");
             }
         }
         
@@ -30,6 +35,7 @@
                       </div>
                     </div>';
            echo '<div id="cup" style="display:none">'.$_SESSION['permission'].'</div>';
+           echo '<div id="cun" style="display:none">'.$_SESSION['user'].'</div>';
            $this->alertDlg();
         }
 

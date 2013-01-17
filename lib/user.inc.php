@@ -19,6 +19,7 @@
                         $_SESSION['id'] = $row[0];
                         $_SESSION['permission'] = $row[3];
                         $_SESSION['logedin'] = TRUE;
+                        $_SESSION['time'] = time();
                        $this->errNone();
                        return $this->getErr();
                    } else {
@@ -54,6 +55,14 @@
                 $sql = sprintf("UPDATE user SET pwd='%s', permission=%s where id=%s",
                           $user->pwd, $user->permission, $user->id);
                 return $this->sqlExec($sql); 
+            } else if (isset($user->pwd)) {
+                $sql = sprintf("UPDATE user SET pwd='%s' where id=%s",
+                          $user->pwd, $user->id);
+                return $this->sqlExec($sql);
+            } else if (isset($user->permission)) {
+                $sql = sprintf("UPDATE user SET permission=%s where id=%s",
+                          $user->permission, $user->id);
+                return $this->sqlExec($sql);
             } else {
                 $this->setErr("name?pwd?permission");
                 return false;
@@ -128,6 +137,12 @@
                 return false;
             }
             
+            $sql = "INSERT INTO user values(null, 'admin', 'admin', 3)";
+            $ret = $this->userDB->exec($sql);
+            if (!$ret) {
+                $this->setErr($this->userDB->lastErrorMsg());
+                return false;
+            }
             return true;
         }
         

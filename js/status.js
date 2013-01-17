@@ -40,6 +40,6 @@ var mstatus = new MStatus();
 $(document).ready(
 	function(){
 		mstatus.refresh();
-		setInterval("mstatus.refresh()",5000);
+		setInterval("mstatus.refresh()", 1000);
 	}
 )

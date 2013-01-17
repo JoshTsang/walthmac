@@ -16,5 +16,9 @@
         $ret = $user->login($login->name, $login->passwd);
     }
     
-    echo $ret;
+    if ($ret) {
+        echo $ret;
+    } else {
+        echo $user->getErr();
+    }
 ?>

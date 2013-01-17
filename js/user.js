@@ -34,7 +34,7 @@ function Users() {
 			return;
 		}
 		
-		if ($("#pwd").is(":visible")) {
+		if ($("#pwd").length > 0) {
 			if (isNull(passwd) || isNull(pwdConfirm)) {
 				alert("密码不能为空!");
 				return;
@@ -56,10 +56,13 @@ function Users() {
 		
 		$("#addUserBtn").button("loading");
 		user.name = name;
-		if ($("#pwd").is(":visible")) {
+		if ($("#pwd").length > 0) {
 			user.pwd = passwd;
 		}
-		user.permission = $("#permission").val();
+		if ($("#permission").length > 0) {
+			user.permission = $("#permission").val();
+		}
+		
 		$.post(url, {user:$.toJSON(user)}, function(data){
 			if (true == data.succ) {
 				window.location.href="manage.php";	
@@ -79,5 +82,9 @@ var users = new Users();
 
 var update = function(index) {
 	var user = users.users[index];
-	window.location.href="user.php?uname=" + user.name + "&uid=" + user.id + "&permission=" + user.permission;
+	if ($("#cup").html() < 3 && $("#cun").html() != user.name) {
+		alert("权限不足！");
+	} else {
+		window.location.href="user.php?uname=" + user.name + "&uid=" + user.id + "&permission=" + user.permission;
+	}
 }
