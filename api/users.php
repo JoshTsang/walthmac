@@ -25,6 +25,13 @@
                  $ret = $user->getErr("user?");
              }
              break;
+         case 'delete':
+             if (isset($_POST['user'])) {
+                 $ret = $user->delete(json_decode($_POST['user']));
+             } else {
+                 $ret = $user->getErr("user?");
+             }
+             break;
      }
      
      if ($ret) {

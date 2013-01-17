@@ -18,6 +18,7 @@
                 $url="login.php";
                 header("Location: $url");
             }
+            $_SESSION['time'] = time();
         }
         
         public function navBar($active) {
@@ -28,8 +29,9 @@
              echo '          <li '.($active==1?'class="active"':"").'><a href="status.php">状态</a></li>';
              echo '          <li '.($active==2?'class="active"':"").'><a href="alert.php">报警</a></li>';
              echo '          <li '.($active==3?'class="active"':"").'><a href="args.php">参数</a></li>';
-             echo '          <li '.($active==4?'class="active"':"").'><a href="manage.php">管理</a></li>';
-             
+             if ($_SESSION['permission'] > 0) {
+                echo '          <li '.($active==4?'class="active"':"").'><a href="manage.php">管理</a></li>';
+             }
              echo '       </ul>
                           <div class="pull-right" style="margin-top:12px; margin-right:15px;"><a href="api/login.php?logout=true"><i class="icon-off"></i></a></div>
                       </div>

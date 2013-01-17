@@ -92,9 +92,19 @@
               <div id="permissionSelection">
                   权限: 
                 <select id="permission" style="width:170px">';
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <?php
+                        echo '<option value="0">浏览权限</option>';
+                        if ($_SESSION['permission'] >= 1) {
+                            echo '<option value="1">操作权限</option>';
+                        }
+                        
+                        if ($_SESSION['permission'] >= 2) {
+                            echo '<option value="2">管理权限</option>';
+                        }
+                        if ($_SESSION['permission'] >= 2) {
+                           echo '<option value="3">超级用户</option>';
+                        }
+                    ?>
                 </select>
               </div>
               <?php } ?>

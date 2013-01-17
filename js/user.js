@@ -13,11 +13,24 @@ function Users() {
 	this.load = function() {
 		$.getJSON("api/users.php", function(data){
 			if (undefined === data.succ) {
-				$("#users").html();
+				$("#users").html("");
+				var row = new String();
 			    $.each(data, function(i, item){
 			    	users.users[i] = new User(item.id, item.name, item.permission);
-			    	$("#users").append('<tr><td class="argName">' + item.name + 
-			    	'</td><td><a class="btn btn-primary pull-right" OnClick="javascript:update(' + i +')">修改</a></td></tr>');
+			    	row = '<tr><td class="argName">' + item.name;
+			    	if ($("#cup").html() >= item.permission || $("#cun").html == item.name) {
+			    		row += '</td><td><div class="pull-right"><a class="btn btn-primary " OnClick="javascript:update(' + i +')">修改</a> ';
+			    		if ($("#cun").html != item.name) {
+			    			row += '&nbsp; <a class="btn btn-primary" OnClick="javascript:remove(' + i +')">删除</a>';
+			    		}
+			    		
+			    		row += '</div></td>';
+			    	} else {
+			    		row += '</td><td> </td>';
+			    	}
+			    	
+			    	row += '</tr>';
+			    	$("#users").append(row);
 			    });
 			} else {
 				//TODO err handle
@@ -76,15 +89,34 @@ function Users() {
 	this.update = function(event) {
 		users.add(event.data.id);
 	}
+	
+	this.remove = function(id) {
+		var user = new Object();
+		user.id = id;
+		$.post("api/users.php?do=delete", {user:$.toJSON(user)}, function(data){
+			if (true == data.succ) {
+				users.load();
+			} else {
+				alert("删除失败!");
+			}
+			$("#addUserBtn").button("reset");
+		}, "json");
+	}
 }
 
 var users = new Users();
 
+var remove = function(index) {
+	var user = users.users[index];
+	var ret = confirm("确认删除用户：" + user.name + " ?");
+	if (ret == true) {
+		users.remove(user.id);
+	}
+}
+
 var update = function(index) {
 	var user = users.users[index];
-	if ($("#cup").html() < 3 && $("#cun").html() != user.name) {
-		alert("权限不足！");
-	} else {
-		window.location.href="user.php?uname=" + user.name + "&uid=" + user.id + "&permission=" + user.permission;
-	}
+	
+	window.location.href="user.php?uname=" + user.name + "&uid=" + user.id + "&permission=" + user.permission;
+
 }
