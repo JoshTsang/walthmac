@@ -20,7 +20,7 @@
                         $_SESSION['permission'] = $row[3];
                         $_SESSION['logedin'] = TRUE;
                         $_SESSION['time'] = time();
-                       $this->errNone();
+                        $this->errNone();
                        return $this->getErr();
                    } else {
                        $this->setErr("pwd incorrect");

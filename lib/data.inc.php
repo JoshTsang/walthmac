@@ -16,6 +16,7 @@
         );
         
         public function getAlerts() {
+            date_default_timezone_set("Asia/chongqing");
             $alerts = array();
             for ($i=0; $i<40; $i++) {
                 $offset = rand(1, 12);

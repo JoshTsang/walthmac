@@ -3,15 +3,15 @@
         private $data = array(
             array('title' => '运行状态'),
             array('name' => '米重设定值','id'=> 'setkgPerMeter', 'unit' => 'kg/m',
-                 'setable' => TRUE, 'btn' => '设置', 'setper' => 2),
+                 'setable' => TRUE, 'btn' => '设置', 'setper' => 1),
             array('name' => '米重实际值','id'=> 'kgPerMeterShow', 'unit' => 'kg/m', 'setable' => FALSE),
-            array('name' => '牵引机机状态','id'=> 'autoManualstateOfDragger', 'unit' => ''
-                    , 'setable' => TRUE, 'btn' => '切换', 'divider' => TRUE, 'setper' => 2),
+            array('name' => '牵引机状态','id'=> 'autoManualstateOfDragger', 'unit' => ''
+                    , 'setable' => TRUE, 'btn' => '切换', 'divider' => TRUE, 'setper' => 1),
             array('name' => '挤出量设定值','id'=> 'setWgtPerHour', 'unit' => 'kg/h',
-                 'setable' => TRUE, 'btn' => '设置', 'setper' => 2),
+                 'setable' => TRUE, 'btn' => '设置', 'setper' => 1),
             array('name' => '挤出量实际值','id'=> 'wgtPerHour', 'unit' => 'kg/h', 'setable' => FALSE),
             array('name' => '挤出机状态','id'=> 'autoManualstateOfExtruder', 'unit' => '',
-                 'setable' => TRUE, 'btn' => '切换', 'divider' => TRUE, 'setper' => 2),
+                 'setable' => TRUE, 'btn' => '切换', 'divider' => TRUE, 'setper' => 1),
             array('name' => '挤出率','id'=> 'wgtPerRev', 'unit' => 'g/rev', 'setable' => FALSE),
             array('name' => '螺杆速度','id'=> 'speedPerMin', 'unit' => 'RPM', 'setable' => FALSE),
             array('name' => '牵引速度','id'=> 'meterPerMin', 'unit' => 'm/m', 'setable' => FALSE, 'divider' => TRUE),
@@ -81,7 +81,7 @@
                 echo '<td class="argName">'.($this->data[$i]['name']).':</td>'.
                     '<td><span id="'.($this->data[$i]['id']).'" class="argValue">value</span><span class="unit"> '.
                     ($this->data[$i]['unit']).'</span>'.
-                    ($this->data[$i]['setable']&&($_SESSION['permission'] >= $this->args[$i]['setPer'])?
+                    ($this->data[$i]['setable']&&($_SESSION['permission'] >= @$this->data[$i]['setper'])?
                     '<span class="pull-right">&nbsp;&nbsp;<button class="btn btn-primary btn-small" type="button" data-toggle="modal">'.
                     $this->data[$i]['btn'].'</button></span>':"").'</td></tr>';
             }
