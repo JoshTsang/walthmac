@@ -3,7 +3,7 @@
     
     class User {
         private $userDB;
-        private $error = array("succ" => FALSE, "msg" => "");
+        private $error = array("err_code" => 0);
         
         public function login($name, $pwd) {
             if (!$this->connetDB()) {
@@ -14,23 +14,26 @@
             $ret = $this->userDB->query($sql);
             if ($ret) {
                 if ($row = $ret->fetchArray()) {
-                   if ($pwd == md5($row[2])) {
+                   if (strtolower($pwd) == strtolower(md5($row[2]))) {
                         $_SESSION['user'] = $row[1];
                         $_SESSION['id'] = $row[0];
                         $_SESSION['permission'] = $row[3];
                         $_SESSION['logedin'] = TRUE;
                         $_SESSION['time'] = time();
-                        $this->errNone();
-                       return $this->getErr();
+                        $login = array('username' => $row[1],
+                                       'uid' => $row[0],
+                                       'permission' => $row[3]);
+                        $this->log($row[0], "登陆系统");
+                       return json_encode($login);
                    } else {
-                       $this->setErr("pwd incorrect");
+                       $this->setErr(PWD_INCORRECT, "pwd incorrect, you:".$pwd.",db:" . $row[2]);
                        return FALSE;
                    }
                 } else {
-                    $this->setErr("no such user");
+                    $this->setErr(USER_NOT_EXIST, "no such user");
                 }
             } else {
-                $this->setErr($this->userDB->lastErrorMsg()."#$sql");
+                $this->setErr(DB_ERR, $this->userDB->lastErrorMsg()."#$sql");
                 return FALSE;
             }
         }
@@ -39,18 +42,29 @@
             $_SESSION['logedin'] = FALSE;
         }
         
-        public function add($user) {
+        //TODO uid
+        public function add($uid, $user) {
             if (isset($user->name) && isset($user->pwd) && isset($user->permission)) {
                 $sql = sprintf("INSERT INTO user values(null, '%s', '%s', %s)", 
                                 $user->name, $user->pwd, $user->permission);
-                return $this->sqlExec($sql); 
+                $ret = $this->sqlExec($sql);
+                if ($ret === FALSE) {
+                    return FALSE;
+                } else {
+                    $this->log($uid, "创建用户：".$user->name);
+                }
             } else {
-                $this->setErr("name?pwd?permission");
+                $this->setErr(PARAM_ERR, "name?pwd?permission");
                 return false;
             }
         }
         
-        public function update($user) {
+        //todo uid
+        public function update($uid, $user) {
+            if (!isset($user->id)) {
+                $this->setErr(PARAM_ERR, "id?");
+                return FALSE;
+            }
             if (isset($user->pwd) && isset($user->permission)) {
                 $sql = sprintf("UPDATE user SET pwd='%s', permission=%s where id=%s",
                           $user->pwd, $user->permission, $user->id);
@@ -64,14 +78,24 @@
                           $user->permission, $user->id);
                 return $this->sqlExec($sql);
             } else {
-                $this->setErr("name?pwd?permission");
+                $this->setErr(PARAM_ERR, "name?pwd?permission");
                 return false;
             }
         }
         
-        public function delete($user) {
+        //todo uid
+        public function delete($uid, $user) {
+            if (!isset($user->id)) {
+                $this->setErr(PARAM_ERR, "id?");
+                return FALSE;
+            }
             $sql = "DELETE FROM user WHERE id=".$user->id;
-            return $this->sqlExec($sql);
+            $ret = $this->sqlExec($sql);
+            if ($ret == FALSE) {
+                return FALSE;
+            } else {
+                $this->log($uid, "删除用户：".$user->id);
+            }
         }
         
         public function getUsers() {
@@ -91,7 +115,40 @@
                     $i++;
                 }
             } else {
-                $this->setErr($this->userDB->lastErrorMsg()."#$sql");
+                $this->setErr(DB_ERR, $this->userDB->lastErrorMsg()."#$sql");
+                return FALSE;
+            }
+            
+            return json_encode($users);
+        }
+        
+        public function log($uid, $action) {
+            $sql = "INSERT INTO log values(null, $uid, datetime(), '$action')";
+            if ($this->sqlExec($sql) === FALSE) {
+                return FALSE;
+            } else {
+                return TRUE;
+            }
+        }
+        
+        public function getLog() {
+            if (!$this->connetDB()) {
+                return FALSE;
+            }
+            
+            $users = array();
+            $sql = "SELECT name,timestamp,action FROM log, user WHERE user.id = log.uid";
+            $ret = $this->userDB->query($sql);
+            if ($ret) {
+                $i = 0;
+                while ($row = $ret->fetchArray()) {
+                    $users[$i] = array('who' => $row[0],
+                                       'when' => $row[1],
+                                       'what' => $row[2]);
+                    $i++;
+                }
+            } else {
+                $this->setErr(DB_ERR, $this->userDB->lastErrorMsg()."#$sql");
                 return FALSE;
             }
             
@@ -100,13 +157,12 @@
         
         public function getErr($msg = null) {
             if ($msg != null) {
-                $this->setErr($msg);
+                $this->setErr(1, $msg);
             }
             return json_encode($this->error);
         }
         
         private function errNone() {
-            $this->error['succ'] = TRUE;
         }
         
         private function sqlExec($sql) {
@@ -119,7 +175,7 @@
                 $this->errNone();
                 return $this->getErr();
             } else {
-                $this->setErr($this->userDB->lastErrorMsg()."#$sql");
+                $this->setErr(DB_ERR, $this->userDB->lastErrorMsg()."#$sql");
                 return FALSE;
             }
         }
@@ -133,21 +189,32 @@
                     [permission] INTEGER NOT NULL);";
             $ret = $this->userDB->exec($sql);
             if (!$ret) {
-                $this->setErr($this->userDB->lastErrorMsg());
+                $this->setErr(DB_ERR, $this->userDB->lastErrorMsg());
+                return false;
+            }个和进口量；
+            
+            $sql = "CREATE TABLE [log] (
+                    [id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    [uid] INTEGER  NOT NULL,
+                    [timestamp] TIMESTAMP  NOT NULL,
+                    [action] TEXT NOT NULL);";
+            $ret = $this->userDB->exec($sql);
+            if (!$ret) {
+                $this->setErr(DB_ERR, $this->userDB->lastErrorMsg());
                 return false;
             }
-            
             $sql = "INSERT INTO user values(null, 'admin', 'admin', 3)";
             $ret = $this->userDB->exec($sql);
             if (!$ret) {
-                $this->setErr($this->userDB->lastErrorMsg());
+                $this->setErr(DB_ERR, $this->userDB->lastErrorMsg());
                 return false;
             }
             return true;
         }
         
-        private function setErr($msg) {
-            $this->error['msg'] = $msg;
+        private function setErr($err_code, $msg) {
+            $this->error['err_code'] = $err_code;
+            $this->error['err_msg'] = $msg;
         }
         
         private function connetDB() {
@@ -155,7 +222,7 @@
                 if (file_exists(USER_DB)) {
                     $this->userDB = new SQLite3(USER_DB);
                     if (!$this->userDB) {
-                        $this->setErr('could not connect db:'.DATABASE_MENU);
+                        $this->setErr(DB_ERR, 'could not connect db:'.DATABASE_MENU);
                         return false;
                     }
                 } else {

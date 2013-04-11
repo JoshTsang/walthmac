@@ -16,13 +16,13 @@
         );
         
         public function getAlerts() {
-            date_default_timezone_set("Asia/chongqing");
             $alerts = array();
             for ($i=0; $i<40; $i++) {
                 $offset = rand(1, 12);
                 $offset = $offset>9?$offset:'0'.$offset;
-                $alerts[$i] = array('alert' => $this->warnings[$offset],
-                                    'timestamp' => date("Y-m-d H:i:s").' ~ '.date("Y-m-d H:i:s"));
+                $alerts[$i] = array('type' => $i%2,
+                                    'alert' => $this->warnings[$offset],
+                                    'timestamp' => date("H:i:s Y.m.d"));
             }
             
             return json_encode($alerts);

@@ -1,4 +1,5 @@
 <?php
+    require '../lib/err.php';
     require '../lib/user.inc.php';
     
     $user = new User();
